@@ -30,7 +30,7 @@
       </div>
     </div>
 
-    <div class="list-group shadow-sm">
+    <div id="categories" class="list-group shadow-sm">
       <%= link_to "All Products", products_path, class: "list-group-item list-group-item-action #{'active' if params[:category_id].blank?}" %>
       <% @categories.each do |cat| %>
         <%= link_to cat.name,
