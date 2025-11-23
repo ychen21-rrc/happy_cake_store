@@ -41,8 +41,13 @@ gem "devise"
 gem "activeadmin"
 gem "kaminari"
 gem "image_processing", "~> 1.2"
-gem "cypress-rails", group: :test
 gem "rubocop", require: false
+gem "dartsass-rails"
+gem "cssbundling-rails"
+
+group :development, :test do
+  gem "cypress-on-rails"
+end
 
 
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
@@ -70,4 +75,4 @@ group :test do
   gem "selenium-webdriver"
 end
 
-gem "bootstrap", "~> 5.3"
+# gem "bootstrap", "~> 5.3"
