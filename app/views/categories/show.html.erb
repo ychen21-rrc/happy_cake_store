@@ -1,2 +1,17 @@
-<h1>Categories#show</h1>
-<p>Find me in app/views/categories/show.html.erb</p>
+<h3 class="mb-3"><%= @category.name %></h3>
+
+<% if @products.any? %>
+  <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-3">
+    <% @products.each do |product| %>
+      <div class="col">
+        <%= render "products/product_card", product: product %>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="mt-4 d-flex justify-content-center">
+    <%= paginate @products %>
+  </div>
+<% else %>
+  <div class="alert alert-info">No products in this category yet.</div>
+<% end %>

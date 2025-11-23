@@ -1,0 +1,27 @@
+<div class="row justify-content-center">
+  <div class="col-md-6 col-lg-4">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h3 class="mb-3 text-center">Log In</h3>
+
+        <%= form_with scope: resource_name, url: session_path(resource_name), local: true do |f| %>
+          <div class="mb-2">
+            <%= f.label :email, class: "form-label" %>
+            <%= f.email_field :email, autofocus: true, class: "form-control" %>
+          </div>
+
+          <div class="mb-3">
+            <%= f.label :password, class: "form-label" %>
+            <%= f.password_field :password, class: "form-control" %>
+          </div>
+
+          <%= f.submit "Log In", class: "btn btn-primary w-100" %>
+        <% end %>
+
+        <div class="text-center small mt-3">
+          No account? <%= link_to "Sign up", new_user_registration_path %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

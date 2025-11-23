@@ -1,69 +1,42 @@
-<div class="container my-4">
-
-  <div class="mb-3">
-    <%= link_to "← Back to Products", products_path, class: "btn btn-outline-secondary btn-sm" %>
+<div class="row g-4">
+  <div class="col-md-6">
+    <% if @product.images.attached? %>
+      <div id="productCarousel" class="carousel slide">
+        <div class="carousel-inner">
+          <% @product.images.each_with_index do |img, i| %>
+            <div class="carousel-item <%= "active" if i == 0 %>">
+              <%= image_tag img.variant(resize_to_limit: [900, 700]), class: "d-block w-100 rounded", alt: @product.name %>
+            </div>
+          <% end %>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#productCarousel" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon"></span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#productCarousel" data-bs-slide="next">
+          <span class="carousel-control-next-icon"></span>
+        </button>
+      </div>
+    <% else %>
+      <div class="bg-secondary-subtle ratio ratio-4x3 d-flex align-items-center justify-content-center rounded">
+        <span class="text-muted">No Image</span>
+      </div>
+    <% end %>
   </div>
 
-  <div class="row g-4">
-    <!-- Images -->
-    <div class="col-md-6">
-      <% if @product.images.attached? %>
-        <div class="mb-2">
-          <%= image_tag @product.images.first.variant(resize_to_limit: [900, 650]),
-                        class: "img-fluid rounded shadow-sm", alt: @product.name %>
-        </div>
-
-        <% if @product.images.count > 1 %>
-          <div class="d-flex flex-wrap gap-2">
-            <% @product.images.each do |img| %>
-              <%= image_tag img.variant(resize_to_limit: [160, 120]),
-                            class: "rounded border", alt: @product.name %>
-            <% end %>
-          </div>
-        <% end %>
-      <% else %>
-        <div class="bg-light d-flex align-items-center justify-content-center rounded"
-             style="height: 320px;">
-          <span class="text-muted">No image</span>
-        </div>
-      <% end %>
+  <div class="col-md-6">
+    <h2><%= @product.name %></h2>
+    <div class="text-muted mb-2">
+      Categories:
+      <%= @product.categories.map(&:name).join(", ") %>
     </div>
 
-    <!-- Info -->
-    <div class="col-md-6">
-      <h1 class="h3"><%= @product.name %></h1>
+    <p class="lead"><%= @product.description %></p>
 
-      <!-- badges -->
-      <div class="mb-2">
-        <% if @product.is_new %>
-          <span class="badge text-bg-success me-1">New</span>
-        <% end %>
-        <% if @product.is_on_sale %>
-          <span class="badge text-bg-danger">Sale</span>
-        <% end %>
-      </div>
+    <h4 class="fw-bold mb-3">$<%= sprintf("%.2f", @product.price) %></h4>
 
-      <p class="lead">
-        $<%= number_with_precision(@product.price, precision: 2) %>
-      </p>
-
-      <p><%= @product.description %></p>
-
-      <!-- categories -->
-      <div class="mb-3">
-        <strong>Categories:</strong>
-        <% @product.categories.each do |c| %>
-          <%= link_to c.name,
-                      products_path(category_id: c.id),
-                      class: "badge text-bg-light border ms-1" %>
-        <% end %>
-      </div>
-
-      <%= button_to "Add to Cart",
-                    add_cart_path(product_id: @product.id),
-                    method: :post,
-                    class: "btn btn-primary btn-lg" %>
+    <div class="d-flex gap-2">
+      <%= button_to "Add to Cart", add_cart_path(@product.id), method: :post, class: "btn btn-primary btn-lg" %>
+      <%= link_to "Back", products_path, class: "btn btn-outline-secondary btn-lg" %>
     </div>
   </div>
-
 </div>

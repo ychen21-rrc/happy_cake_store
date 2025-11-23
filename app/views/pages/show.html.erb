@@ -1,2 +1,9 @@
-<h1>Pages#show</h1>
-<p>Find me in app/views/pages/show.html.erb</p>
+<div class="card shadow-sm">
+  <div class="card-body">
+    <h3 class="card-title"><%= @page.title %></h3>
+    <hr>
+    <div class="prose">
+      <%= simple_format(@page.content) %>
+    </div>
+  </div>
+</div>

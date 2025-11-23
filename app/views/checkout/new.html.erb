@@ -1,2 +1,103 @@
-<h1>Checkout#new</h1>
-<p>Find me in app/views/checkout/new.html.erb</p>
+<h3 class="mb-3">Checkout</h3>
+
+<% if @items.blank? %>
+  <div class="alert alert-warning">Cart is empty. <%= link_to "Go shopping", products_path %></div>
+<% else %>
+  <div class="row g-4">
+    <div class="col-lg-7">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title mb-3">Shipping / Pickup Address</h5>
+
+          <%= form_with model: @address, url: checkout_path, method: :post, local: true do |f| %>
+            <div class="mb-2">
+              <%= f.label :street, class: "form-label" %>
+              <%= f.text_field :street, class: "form-control" %>
+              <div class="text-danger small"><%= @address.errors[:street].first %></div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6 mb-2">
+                <%= f.label :city, class: "form-label" %>
+                <%= f.text_field :city, class: "form-control" %>
+                <div class="text-danger small"><%= @address.errors[:city].first %></div>
+              </div>
+
+              <div class="col-md-6 mb-2">
+                <%= f.label :province_id, "Province", class: "form-label" %>
+                <%= f.collection_select :province_id, @provinces, :id, :name, {prompt: "Select province"}, class: "form-select" %>
+                <div class="text-danger small"><%= @address.errors[:province].first %></div>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <%= f.label :postal_code, class: "form-label" %>
+              <%= f.text_field :postal_code, class: "form-control" %>
+              <div class="text-danger small"><%= @address.errors[:postal_code].first %></div>
+            </div>
+
+            <%= f.submit "Place Order", class: "btn btn-primary btn-lg w-100" %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-5">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title mb-3">Invoice Preview</h5>
+
+          <% subtotal = @items.sum { |p| p.price * session[:cart][p.id.to_s] } %>
+
+          <ul class="list-group list-group-flush">
+            <% @items.each do |p| %>
+              <li class="list-group-item d-flex justify-content-between">
+                <div>
+                  <%= p.name %>
+                  <span class="text-muted small">x <%= session[:cart][p.id.to_s] %></span>
+                </div>
+                <div>$<%= sprintf("%.2f", p.price * session[:cart][p.id.to_s]) %></div>
+              </li>
+            <% end %>
+          </ul>
+
+          <hr>
+
+          <div class="d-flex justify-content-between mb-1">
+            <span>Subtotal</span>
+            <strong>$<%= sprintf("%.2f", subtotal) %></strong>
+          </div>
+
+          <% if @address.province.present? %>
+            <% prov = @address.province %>
+            <% gst_amount = subtotal * prov.gst %>
+            <% pst_amount = subtotal * prov.pst %>
+            <% hst_amount = subtotal * prov.hst %>
+            <% total = subtotal + gst_amount + pst_amount + hst_amount %>
+
+            <div class="d-flex justify-content-between small">
+              <span>GST (<%= (prov.gst*100).to_i %>%)</span>
+              <span>$<%= sprintf("%.2f", gst_amount) %></span>
+            </div>
+            <div class="d-flex justify-content-between small">
+              <span>PST (<%= (prov.pst*100).to_i %>%)</span>
+              <span>$<%= sprintf("%.2f", pst_amount) %></span>
+            </div>
+            <div class="d-flex justify-content-between small">
+              <span>HST (<%= (prov.hst*100).to_i %>%)</span>
+              <span>$<%= sprintf("%.2f", hst_amount) %></span>
+            </div>
+
+            <hr>
+            <div class="d-flex justify-content-between fs-5">
+              <span>Total</span>
+              <strong>$<%= sprintf("%.2f", total) %></strong>
+            </div>
+          <% else %>
+            <div class="text-muted small">Taxes will calculate after selecting province.</div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
