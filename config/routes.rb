@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get "pages/show"
   get "orders/index"
   get "orders/show"
   get "orders/create"
