@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get "checkout/new"
+  get "checkout/create"
   get "carts/show"
   get "categories/show"
   get "products/index"
