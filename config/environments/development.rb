@@ -31,6 +31,11 @@ Rails.application.configure do
   # Store uploaded files on the local file system (see config/storage.yml for options).
   config.active_storage.service = :local
 
+  # Use MiniMagick for ActiveStorage variants in development when libvips
+  # isn't available on the developer machine. Install ImageMagick and the
+  # `mini_magick` gem, then restart the server.
+  config.active_storage.variant_processor = :mini_magick
+
   # Don't care if the mailer can't send.
   config.action_mailer.raise_delivery_errors = false
 

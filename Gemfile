@@ -41,6 +41,7 @@ gem "devise"
 gem "activeadmin"
 gem "kaminari"
 gem "image_processing", "~> 1.2"
+gem "mini_magick"
 gem "rubocop", require: false
 gem "dartsass-rails"
 gem "cssbundling-rails"
