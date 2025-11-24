@@ -1,0 +1,35 @@
+#!/usr/bin/env sh
+set -e
+
+# Find ActiveAdmin gem path (if installed)
+AA_PATH=$(bundle info activeadmin --path 2>/dev/null || true)
+AA_ASSETS=""
+if [ -n "$AA_PATH" ]; then
+  AA_ASSETS="$AA_PATH/app/assets/stylesheets"
+fi
+
+# Build application CSS (Bootstrap)
+echo "Compiling application.bootstrap.scss -> app/assets/builds/application.css"
+sass --no-source-map --load-path=node_modules ${AA_ASSETS:+--load-path="$AA_ASSETS"} ./app/assets/stylesheets/application.bootstrap.scss:./app/assets/builds/application.css
+
+# Build ActiveAdmin CSS (include gem assets on load path if available)
+echo "Compiling active_admin.scss -> app/assets/builds/active_admin.css"
+if [ -n "$AA_ASSETS" ]; then
+  sass --no-source-map --load-path=node_modules --load-path="$AA_ASSETS" ./app/assets/stylesheets/active_admin.scss:./app/assets/builds/active_admin.css
+else
+  # Try to compile without gem assets; compilation may fail if imports are missing
+  sass --no-source-map --load-path=node_modules ./app/assets/stylesheets/active_admin.scss:./app/assets/builds/active_admin.css || true
+fi
+
+# Post-process with PostCSS/autoprefixer
+if [ -f ./app/assets/builds/application.css ]; then
+  echo "Post-processing application.css"
+  postcss ./app/assets/builds/application.css --use=autoprefixer --output=./app/assets/builds/application.css
+fi
+
+if [ -f ./app/assets/builds/active_admin.css ]; then
+  echo "Post-processing active_admin.css"
+  postcss ./app/assets/builds/active_admin.css --use=autoprefixer --output=./app/assets/builds/active_admin.css
+fi
+
+echo "CSS build finished."
