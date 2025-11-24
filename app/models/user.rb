@@ -5,4 +5,6 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable
   
   has_many :orders
+  # Each user can have one shipping/billing address record
+  has_one :address, dependent: :destroy
 end
