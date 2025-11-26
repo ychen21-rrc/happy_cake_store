@@ -1,5 +1,5 @@
 class PagesController < ApplicationController
   def show
-    @page = Page.find_by!(title: params[:title].capitalize)
+    @page = Page.find_by!(slug: params[:slug])
   end
 end

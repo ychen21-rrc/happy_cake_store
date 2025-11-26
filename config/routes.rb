@@ -28,5 +28,5 @@ Rails.application.routes.draw do
   get "/checkout", to: "checkout#new"
   post "/checkout", to: "checkout#create"
 
-  get "/pages/:title", to: "pages#show", as: :page
+  get "/pages/:slug", to: "pages#show", as: :page
 end

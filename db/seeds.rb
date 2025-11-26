@@ -131,6 +131,7 @@ puts "== Seeding Pages (About / Contact) =="
 
 Page.create!(
   title: "About",
+  slug: "about",
   content: <<~TEXT
     Happy Cake Store is a local bakery in Winnipeg, Manitoba, known for handmade cakes, pastries, cookies, and seasonal desserts.
     We have served the community for 7 years and now offer online ordering for quick pickup and special occasions.
@@ -139,6 +140,7 @@ Page.create!(
 
 Page.create!(
   title: "Contact",
+  slug: "contact",
   content: <<~TEXT
     Happy Cake Store
     123 Portage Ave, Winnipeg, MB
